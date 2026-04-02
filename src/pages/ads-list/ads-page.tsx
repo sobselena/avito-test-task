@@ -17,10 +17,16 @@ import {
   UnstyledButton,
 } from '@mantine/core';
 
-import { IconChevronUp, IconLayoutGrid, IconList, IconSearch } from '@tabler/icons-react';
+import {
+  IconChevronDown,
+  IconChevronUp,
+  IconLayoutGrid,
+  IconList,
+  IconSearch,
+} from '@tabler/icons-react';
 export const AdsPage = () => (
   <Container size="xl" py="xl">
-    <Stack gap="lg">
+    <Stack gap="md">
       <Box>
         <Title order={2} fw={500}>
           Мои объявления
@@ -30,7 +36,7 @@ export const AdsPage = () => (
         </Text>
       </Box>
 
-      <Card padding="xs" radius="md" shadow="xs">
+      <Card p={12} radius="md" shadow="xs">
         <Group justify="space-between">
           <TextInput
             placeholder="Найди объявление..."
@@ -49,10 +55,20 @@ export const AdsPage = () => (
           </ActionIcon.Group>
 
           <Select
-            placeholder="Сортировка"
+            variant="default"
+            placeholder="Pick value"
             data={['По новизне (сначала новые)', 'По цене']}
-            defaultValue={'По новизне'}
+            defaultValue="По новизне (сначала новые)"
+            clearable
+            rightSection={<IconChevronDown size={18} />}
+            clearSectionMode="rightSection"
             comboboxProps={{ width: 240 }}
+            allowDeselect={false}
+            styles={{
+              input: {
+                border: '5px solid var(--mantine-color-gray-light)',
+              },
+            }}
           />
         </Group>
       </Card>
@@ -83,10 +99,10 @@ export const AdsPage = () => (
                 <Divider />
 
                 <Group justify="space-between" align="center" wrap="nowrap">
-                  <Text size="md" fw={700}>
+                  <Text size="sm" fw={700}>
                     Только требующие доработок
                   </Text>
-                  <Switch size="sm" />
+                  <Switch size="md" withThumbIndicator={false} />
                 </Group>
               </Stack>
             </Card>
