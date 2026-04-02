@@ -4,9 +4,14 @@ import { SearchPanel } from './components/search-panel';
 import { Filters } from './components/filters';
 import { CardsContainer } from './components/cards-container';
 import { useGetAdsQuery } from '../../redux/api';
+import { useSearchParams } from 'react-router';
 export const AdsPage = () => {
-  const { data, isLoading } = useGetAdsQuery();
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get('page'));
+  const { data, isLoading } = useGetAdsQuery(page);
+  function handleChange(value: number) {
+    setSearchParams({ page: value.toString() });
+  }
   return (
     <Container size="xl" py="xl">
       <Stack gap="md">
@@ -35,6 +40,8 @@ export const AdsPage = () => {
               boundaries={0}
               hideWithOnePage={true}
               siblings={2}
+              onChange={(value) => handleChange(value)}
+              value={page || 1}
             />
           </Stack>
         </Flex>
