@@ -1,13 +1,18 @@
-import { ActionIcon, Card, Group, Select, TextInput } from '@mantine/core';
-import { IconChevronDown, IconLayoutGrid, IconList, IconSearch } from '@tabler/icons-react';
+import { ActionIcon, Card, Group, TextInput } from '@mantine/core';
+import { IconLayoutGrid, IconList, IconSearch } from '@tabler/icons-react';
 import { useSearchParams } from 'react-router';
+import { Selector } from '../selector';
 
 export const SearchPanel = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   function handleInput(value: string) {
     const params = new URLSearchParams(searchParams);
-    params.set('q', value);
+    if (value === '') {
+      params.delete('q');
+    } else {
+      params.set('q', value);
+    }
     params.set('page', '1');
     setSearchParams(params);
   }
@@ -33,22 +38,7 @@ export const SearchPanel = () => {
           </ActionIcon>
         </ActionIcon.Group>
 
-        <Select
-          variant="default"
-          placeholder="Pick value"
-          data={['По новизне (сначала новые)', 'По цене']}
-          defaultValue="По новизне (сначала новые)"
-          clearable
-          rightSection={<IconChevronDown size={18} />}
-          clearSectionMode="rightSection"
-          comboboxProps={{ width: 240 }}
-          allowDeselect={false}
-          styles={{
-            input: {
-              border: '5px solid var(--mantine-color-gray-light)',
-            },
-          }}
-        />
+        <Selector />
       </Group>
     </Card>
   );

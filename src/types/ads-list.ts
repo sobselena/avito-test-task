@@ -16,7 +16,7 @@ export type ItemsGetOut = {
   total: number;
 };
 
-export type SortColumnType = 'title' | 'createdAt';
+export type SortColumnType = 'title' | 'createdAt' | 'price';
 export type SortDirectionType = 'asc' | 'desc';
 
 export type AdsFilters = Partial<{

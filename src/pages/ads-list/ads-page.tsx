@@ -8,6 +8,7 @@ import { getFiltersData } from '../../utils';
 
 export const AdsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const filtersData = getFiltersData(searchParams);
   const { data, isFetching } = useGetAdsQuery(filtersData);
   function handleChange(value: number) {

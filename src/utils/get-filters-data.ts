@@ -1,5 +1,5 @@
 import { PAGINATION_LIMIT } from '../constants';
-import type { AdsFilters, SortDirectionType } from '../types';
+import type { AdsFilters, SortColumnType, SortDirectionType } from '../types';
 
 export function getFiltersData(searchParams: URLSearchParams): AdsFilters {
   const page = Number(searchParams.get('page')) || 1;
@@ -12,6 +12,7 @@ export function getFiltersData(searchParams: URLSearchParams): AdsFilters {
     q: searchParams.get('q') || '',
     categories,
     needsRevision: searchParams.get('needsRevision') === 'true',
-    sortDirection: (searchParams.get('sortDirection') as SortDirectionType) || 'asc',
+    sortColumn: (searchParams.get('sortColumn') as SortColumnType) || undefined,
+    sortDirection: (searchParams.get('sortDirection') as SortDirectionType) || undefined,
   };
 }

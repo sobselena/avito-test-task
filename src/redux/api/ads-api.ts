@@ -8,12 +8,22 @@ export const adsApi = createApi({
   }),
   endpoints: (build) => ({
     getAds: build.query<ItemsGetOut, AdsFilters>({
-      query: (filters) => ({
-        url: `?${Object.entries(filters)
-          .filter(([, value]) => value)
-          .map(([keys, value]) => `${keys}=${value}`)
-          .join('&')}`,
-      }),
+      query: (filters) => {
+        {
+          console.log(
+            `?${Object.entries(filters)
+              .filter(([, value]) => value)
+              .map(([keys, value]) => `${keys}=${value}`)
+              .join('&')}`
+          );
+          return {
+            url: `?${Object.entries(filters)
+              .filter(([, value]) => value)
+              .map(([keys, value]) => `${keys}=${value}`)
+              .join('&')}`,
+          };
+        }
+      },
     }),
   }),
 });
