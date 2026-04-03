@@ -1,6 +1,7 @@
 import { Badge, Card, Group, Image, Stack, Text } from '@mantine/core';
 import placeholderImg from '../../../../app/assets/images/placeholder.png';
 import type { Item } from '../../../../types';
+import { Link } from 'react-router';
 
 type Props = {
   ad: Item;
@@ -12,8 +13,11 @@ export const AdCard = ({ ad }: Props) => (
     radius="md"
     padding="md"
     h={280}
+    w={190}
     display="flex"
-    style={{ flexDirection: 'column' }}
+    style={{ flexDirection: 'column', flexShrink: 0 }}
+    component={Link}
+    to={`${ad.id}`}
   >
     <Card.Section>
       <Image src={placeholderImg} height={120} alt="Ad image" fit="cover" />

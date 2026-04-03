@@ -1,4 +1,4 @@
-import { Grid, Loader } from '@mantine/core';
+import { Box, Loader, SimpleGrid } from '@mantine/core';
 import type { Item } from '../../../../types';
 import { AdCard } from '../ad-card';
 
@@ -6,19 +6,14 @@ type Props = {
   ads: Item[];
   isLoading: boolean;
 };
-export const CardsContainer = ({ ads, isLoading }: Props) => {
-  console.log(ads);
-  return (
-    <>
-      {isLoading && <Loader />}
-      <Grid justify="space-between" gap={14}>
-        {ads.length > 0 &&
-          ads.map((adInfo) => (
-            <Grid.Col key={adInfo.id} span={{ base: 12, md: 2.4, sm: 6 }}>
-              <AdCard ad={adInfo} />
-            </Grid.Col>
-          ))}
-      </Grid>
-    </>
-  );
-};
+export const CardsContainer = ({ ads, isLoading }: Props) => (
+  <>
+    {isLoading && <Loader />}
+    {!isLoading && ads.length === 0 && <Box c="red">Ничего не найдено</Box>}
+    {!isLoading && (
+      <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, lg: 5 }} spacing="md" verticalSpacing="md">
+        {ads.length > 0 && ads.map((adInfo) => <AdCard key={adInfo.id} ad={adInfo} />)}
+      </SimpleGrid>
+    )}
+  </>
+);

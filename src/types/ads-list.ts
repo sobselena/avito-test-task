@@ -1,6 +1,8 @@
+export type CategoryType = 'auto' | 'real_estate' | 'electronics';
+
 export type Item = {
   id: number;
-  category: 'auto' | 'real_estate' | 'electronics';
+  category: CategoryType;
   title: string;
   price: number;
   // Требуются ли доработки
@@ -13,3 +15,16 @@ export type ItemsGetOut = {
   // Общее количество записей, подходящих под условия фильтрации
   total: number;
 };
+
+export type SortColumnType = 'title' | 'createdAt';
+export type SortDirectionType = 'asc' | 'desc';
+
+export type AdsFilters = Partial<{
+  limit: number;
+  skip: number;
+  q: string;
+  needsRevision: boolean;
+  categories: string;
+  sortColumn: SortColumnType;
+  sortDirection: SortDirectionType;
+}>;
