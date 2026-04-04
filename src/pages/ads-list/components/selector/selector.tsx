@@ -31,10 +31,8 @@ export const Selector = () => {
       placeholder="Pick value"
       data={selectors.map((selector) => selector.label)}
       value={currentSelector?.label || 'Без сортировки'}
-      clearable
       onChange={(value) => handleSelect(value)}
       rightSection={<IconChevronDown size={18} />}
-      clearSectionMode="rightSection"
       comboboxProps={{ width: 240 }}
       allowDeselect={false}
       styles={{
