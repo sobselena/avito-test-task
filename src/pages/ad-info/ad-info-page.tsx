@@ -46,7 +46,7 @@ export const AdInfoPage = () => {
                 {data.title}
               </Title>
               <Title order={2} fw={500} style={{ fontSize: 24 }}>
-                {data.price.toLocaleString()} ₽
+                {data.price} ₽
               </Title>
             </Group>
 
