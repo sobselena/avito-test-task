@@ -15,7 +15,7 @@ import placeholderImg from '../../app/assets/images/placeholder.png';
 import { useGetAdInfoQuery } from '../../redux/api';
 import { getDateFormat } from '../../utils';
 import { Characteristics } from './components/characteristics';
-import { NeedsRevision } from './components/alert';
+import { NeedsRevision } from './components/needs-revision';
 
 export const AdInfoPage = () => {
   const params = useParams();

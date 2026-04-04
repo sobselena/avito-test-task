@@ -2,7 +2,7 @@ import { Alert, Paper } from '@mantine/core';
 import { IconAlertCircleFilled } from '@tabler/icons-react';
 import { getUnfilledCharacteristics } from '../../utils';
 import type { RevisionType } from '../../types';
-import { categoryTranslations } from '../../constants';
+import { categoryTranslations } from '../../../../constants';
 
 export const NeedsRevision = ({ category, params, description }: RevisionType) => (
   <Paper shadow="lg" radius="md" mb={16}>
@@ -20,7 +20,7 @@ export const NeedsRevision = ({ category, params, description }: RevisionType) =
           category: category,
           params: params,
         }).map((charKey) => (
-          <li key={charKey}>{categoryTranslations[category][charKey]}</li>
+          <li key={charKey}>{categoryTranslations[category][charKey].name}</li>
         ))}
       </ul>
     </Alert>
