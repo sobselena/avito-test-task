@@ -29,21 +29,6 @@ export type AdsFilters = Partial<{
   sortDirection: SortDirectionType;
 }>;
 
-export type ItemUpdateIn = {
-  category: 'auto' | 'real_estate' | 'electronics';
-  title: string;
-  description?: string;
-  price: number;
-  params: AutoItemParams | RealEstateItemParams | ElectronicsItemParams;
-};
-
-export type ItemUpdateOut = ItemUpdateIn & {
-  id: number;
-  createdAt: Date;
-  updatedAt?: Date;
-  needsRevision: boolean;
-};
-
 export type AutoItemParams = {
   brand?: string;
   model?: string;
@@ -66,4 +51,21 @@ export type ElectronicsItemParams = {
   model?: string;
   condition?: 'new' | 'used';
   color?: string;
+};
+
+export type ParamsType = AutoItemParams | RealEstateItemParams | ElectronicsItemParams;
+
+export type ItemUpdateIn = {
+  category: 'auto' | 'real_estate' | 'electronics';
+  title: string;
+  description?: string;
+  price: number;
+  params: ParamsType;
+};
+
+export type ItemUpdateOut = ItemUpdateIn & {
+  id: number;
+  createdAt: Date;
+  updatedAt?: Date;
+  needsRevision: boolean;
 };

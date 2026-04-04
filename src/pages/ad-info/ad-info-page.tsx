@@ -1,23 +1,21 @@
 import {
-  Alert,
   Button,
   Container,
   Divider,
   Group,
   Image,
   Loader,
-  Paper,
   Stack,
   Text,
   Title,
 } from '@mantine/core';
-import { IconAlertCircle, IconArrowNarrowLeft, IconPencil } from '@tabler/icons-react';
+import { IconArrowNarrowLeft, IconPencil } from '@tabler/icons-react';
 import { Link, useNavigate, useParams } from 'react-router';
 import placeholderImg from '../../app/assets/images/placeholder.png';
-import { Paths } from '../../constants';
 import { useGetAdInfoQuery } from '../../redux/api';
 import { getDateFormat } from '../../utils';
 import { Characteristics } from './components/characteristics';
+import { NeedsRevision } from './components/alert';
 
 export const AdInfoPage = () => {
   const params = useParams();
@@ -33,7 +31,7 @@ export const AdInfoPage = () => {
           color="gray"
           p={0}
           leftSection={<IconArrowNarrowLeft size={16} />}
-          onClick={() => navigate(Paths.ADS_LIST, { replace: true })}
+          onClick={() => navigate(-1)}
         >
           Вернуться к списку объявлений
         </Button>
@@ -78,9 +76,7 @@ export const AdInfoPage = () => {
                     <Title order={3} fw={500} size="lg">
                       Описание
                     </Title>
-                    <Text style={{ whiteSpace: 'pre-line' }}>
-                      {data.description || 'Отсутствует'}
-                    </Text>
+                    <Text c={'red'}>{data.description || 'Отсутствует'}</Text>
                   </Stack>
                 </Stack>
               </Stack>
@@ -88,23 +84,9 @@ export const AdInfoPage = () => {
               <Stack w={512}>
                 <Stack gap="xs">
                   {data.needsRevision && (
-                    <Paper shadow="lg" radius="md" mb={36}>
-                      <Alert
-                        variant="light"
-                        color="orange"
-                        title="Требуются доработки"
-                        icon={<IconAlertCircle size={18} color="orange" />}
-                        c="black"
-                      >
-                        У объявления не заполнены поля:
-                        <ul style={{ marginTop: 8, paddingLeft: 20, marginBlockEnd: 0 }}>
-                          <li>Цвет</li>
-                          <li>Состояние</li>
-                        </ul>
-                      </Alert>
-                    </Paper>
+                    <NeedsRevision params={data.params} category={data.category} />
                   )}
-                  <Characteristics params={data.params} />
+                  <Characteristics params={data.params} category={data.category} />
                 </Stack>
               </Stack>
             </Group>
