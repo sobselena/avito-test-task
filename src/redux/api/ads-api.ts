@@ -10,17 +10,9 @@ export const adsApi = createApi({
     getAds: build.query<ItemsGetOut, AdsFilters>({
       query: (filters) => {
         {
-          console.log(
-            `?${Object.entries(filters)
-              .filter(([, value]) => value)
-              .map(([keys, value]) => `${keys}=${value}`)
-              .join('&')}`
-          );
           return {
-            url: `?${Object.entries(filters)
-              .filter(([, value]) => value)
-              .map(([keys, value]) => `${keys}=${value}`)
-              .join('&')}`,
+            url: '',
+            params: filters,
           };
         }
       },
