@@ -8,7 +8,7 @@ export const Characteristics = ({ category, params }: RevisionType) => {
   const rows = Object.entries(params).map(([key, value]) => (
     <Table.Tr key={key}>
       <Table.Td c="dimmed" w={150} p={2} fw={500}>
-        {categoryTranslations[category][key].name}
+        {categoryTranslations[category][key].label}
       </Table.Td>
       <Table.Td p={2}>{value || '—'}</Table.Td>
     </Table.Tr>

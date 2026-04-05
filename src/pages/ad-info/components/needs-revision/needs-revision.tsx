@@ -20,7 +20,7 @@ export const NeedsRevision = ({ category, params, description }: RevisionType) =
           category: category,
           params: params,
         }).map((charKey) => (
-          <li key={charKey}>{categoryTranslations[category][charKey].name}</li>
+          <li key={charKey}>{categoryTranslations[category][charKey].label}</li>
         ))}
       </ul>
     </Alert>

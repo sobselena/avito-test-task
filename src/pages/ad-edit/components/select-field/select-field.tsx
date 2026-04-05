@@ -1,16 +1,16 @@
 import { Select } from '@mantine/core';
-import type { FieldsProps } from '../../types';
+import type { SelectFieldProps } from '../../types';
 import { IconChevronDown } from '@tabler/icons-react';
 
 export const SelectField = ({
   label,
   data,
   allowDeselect = true,
-  onChange,
   fw = 700,
-  necessary,
-  defaultValue,
-}: FieldsProps) => (
+  necessary = true,
+  inputQuery,
+  ...props
+}: SelectFieldProps) => (
   <Select
     label={
       necessary ? (
@@ -21,19 +21,19 @@ export const SelectField = ({
         label
       )
     }
-    key={defaultValue}
     placeholder={label}
     data={data}
-    defaultValue={defaultValue ?? null}
-    onChange={(value) => {
-      if (value) onChange?.(value);
-    }}
     w={456}
+    defaultValue={inputQuery}
     rightSection={<IconChevronDown size={18} />}
     comboboxProps={{ width: 240 }}
     allowDeselect={allowDeselect}
     styles={{
       label: { marginBottom: 6, fontWeight: fw },
+      input: {
+        borderColor: !necessary && !inputQuery ? 'var(--mantine-color-orange-5)' : undefined,
+      },
     }}
+    {...props}
   />
 );

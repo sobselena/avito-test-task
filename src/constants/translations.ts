@@ -2,53 +2,53 @@ import type { CategoryType } from '../types';
 
 export const categoryTranslations: Record<
   CategoryType,
-  Record<string, { name: string; possibleValues?: { name: string; value: string }[] }>
+  Record<string, { label: string; possibleValues?: { label: string; value: string }[] }>
 > = {
   auto: {
-    brand: { name: 'Бренд' },
-    model: { name: 'Модель' },
-    yearOfManufacture: { name: 'Год выпуска' },
+    brand: { label: 'Бренд' },
+    model: { label: 'Модель' },
+    yearOfManufacture: { label: 'Год выпуска' },
     transmission: {
-      name: 'Коробка передач',
+      label: 'Коробка передач',
       possibleValues: [
-        { name: 'Автомат', value: 'automatic' },
-        { name: 'Механика', value: 'manual' },
+        { label: 'Автомат', value: 'automatic' },
+        { label: 'Механика', value: 'manual' },
       ],
     },
-    mileage: { name: 'Пробег' },
-    enginePower: { name: 'Мощность двигателя' },
+    mileage: { label: 'Пробег' },
+    enginePower: { label: 'Мощность двигателя' },
   },
   real_estate: {
     type: {
-      name: 'Тип',
+      label: 'Тип',
       possibleValues: [
-        { value: 'flat', name: 'Квартира' },
-        { value: 'house', name: 'Дом' },
-        { value: 'room', name: 'Комната' },
+        { value: 'flat', label: 'Квартира' },
+        { value: 'house', label: 'Дом' },
+        { value: 'room', label: 'Комната' },
       ],
     },
-    address: { name: 'Адрес' },
-    area: { name: 'Площадь' },
-    floor: { name: 'Этаж' },
+    address: { label: 'Адрес' },
+    area: { label: 'Площадь' },
+    floor: { label: 'Этаж' },
   },
   electronics: {
     type: {
-      name: 'Тип',
+      label: 'Тип',
       possibleValues: [
-        { value: 'phone', name: 'Телефон' },
-        { value: 'laptop', name: 'Ноутбук' },
-        { value: 'misc', name: 'Микропроцессор' },
+        { value: 'phone', label: 'Телефон' },
+        { value: 'laptop', label: 'Ноутбук' },
+        { value: 'misc', label: 'Микропроцессор' },
       ],
     },
-    brand: { name: 'Бренд' },
-    model: { name: 'Модель' },
+    brand: { label: 'Бренд' },
+    model: { label: 'Модель' },
     condition: {
-      name: 'Cостояние',
+      label: 'Cостояние',
       possibleValues: [
-        { value: 'new', name: 'Новые' },
-        { value: 'used', name: 'Б/У' },
+        { value: 'new', label: 'Новые' },
+        { value: 'used', label: 'Б/У' },
       ],
     },
-    color: { name: 'Цвет' },
+    color: { label: 'Цвет' },
   },
 };

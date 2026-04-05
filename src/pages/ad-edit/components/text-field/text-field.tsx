@@ -1,35 +1,32 @@
 import { TextInput } from '@mantine/core';
+import type { TextFieldProps } from '../../types';
 import { IconXboxXFilled } from '@tabler/icons-react';
-import type { FieldsProps } from '../../types';
-import { useState } from 'react';
-
-export const TextField = ({ label, value, fw = 700, necessary = false }: FieldsProps) => {
-  const [currentValue, setCurrentValue] = useState(value || '');
-  return (
-    <TextInput
-      size="sm"
-      label={
-        necessary ? (
-          <span>
-            <span style={{ color: 'red', marginRight: 4 }}>*</span> {label}
-          </span>
-        ) : (
-          label
-        )
-      }
-      onChange={(e) => setCurrentValue(e.target.value)}
-      placeholder={label}
-      value={currentValue}
-      w={456}
-      rightSection={
-        <IconXboxXFilled size={18} cursor="pointer" onClick={() => setCurrentValue('')} />
-      }
-      styles={{
-        label: { marginBottom: 6, fontWeight: fw },
-        input: {
-          borderColor: !necessary && currentValue === '' ? 'orange' : undefined,
-        },
-      }}
-    />
-  );
-};
+export const TextField = ({
+  label,
+  necessary = false,
+  fw = 700,
+  onClear,
+  ...props
+}: TextFieldProps & { onClear?: () => void }) => (
+  <TextInput
+    label={
+      necessary ? (
+        <span>
+          <span style={{ color: 'red', marginRight: 4 }}>*</span> {label}
+        </span>
+      ) : (
+        label
+      )
+    }
+    placeholder={label}
+    w={456}
+    rightSection={<IconXboxXFilled size={18} style={{ cursor: 'pointer' }} onClick={onClear} />}
+    styles={{
+      label: { marginBottom: 6, fontWeight: fw },
+      input: {
+        borderColor: !necessary && !props.value ? 'var(--mantine-color-orange-5)' : undefined,
+      },
+    }}
+    {...props}
+  />
+);
