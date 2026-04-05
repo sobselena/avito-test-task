@@ -1,18 +1,26 @@
 import { useParams } from 'react-router';
 import { useGetAdInfoQuery } from '../../../../redux/api';
 import { CATEGORY_OPTIONS } from '../../../../constants';
-import { Button, Divider, Group, Stack, Textarea } from '@mantine/core';
+import { Button, Divider, Group, Loader, Stack, Textarea } from '@mantine/core';
 import { TextField } from '../text-field';
 import { CharacteristicsFields } from '../characteristics-fields';
 import { SelectField } from '../select-field';
-import { getCategory, getCategoryDefaultValue } from '../../utils';
+import { getCategory, getCategoryByName, getCategoryDefaultValue } from '../../utils';
+import { useState } from 'react';
+import type { ItemUpdateOut } from '../../../../types';
 
 export const ItemForm = () => {
   const { id } = useParams();
-  const { data } = useGetAdInfoQuery(Number(id));
+  const { data, isFetching } = useGetAdInfoQuery(Number(id));
+  if (isFetching) {
+    return <Loader />;
+  }
+  return <>{data && <ActualForm data={data} />}</>;
+};
 
-  const category = getCategory(data);
-  const categoryDefaultValue = getCategoryDefaultValue(data?.category);
+const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
+  const [category, setCategory] = useState(getCategory(data?.category));
+  const categoryDefaultValue = getCategoryDefaultValue(category);
   return (
     <form>
       <Stack gap="md">
@@ -20,6 +28,11 @@ export const ItemForm = () => {
           label="Категория"
           data={CATEGORY_OPTIONS.map((option) => option.label)}
           defaultValue={categoryDefaultValue}
+          allowDeselect={false}
+          onChange={(newCategory) => {
+            const value = getCategoryByName(newCategory);
+            if (value) setCategory(value);
+          }}
         />
 
         <Divider />

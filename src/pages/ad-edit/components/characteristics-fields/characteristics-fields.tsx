@@ -12,6 +12,7 @@ export const CharacteristicsFields = ({
   params?: ParamsType;
 }) => {
   const fields = categoryTranslations[category || CATEGORY_OPTIONS[0].value];
+  console.log(fields);
 
   return (
     <Stack gap="sm">
