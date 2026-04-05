@@ -24,7 +24,7 @@ export type AdsFilters = Partial<{
   skip: number;
   q: string;
   needsRevision: boolean;
-  categories: CategoryType[];
+  categories: string;
   sortColumn: SortColumnType;
   sortDirection: SortDirectionType;
 }>;

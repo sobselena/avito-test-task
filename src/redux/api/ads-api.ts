@@ -29,7 +29,7 @@ export const adsApi = createApi({
       query: (id) => ({
         url: `${id}`,
       }),
-      providesTags: (result, error, id) => [{ type: 'Item', id }],
+      providesTags: (_result, _error, id) => [{ type: 'Item', id }],
     }),
     editAdInfo: build.mutation<undefined, { id: number; body: ActualItemUpdateIn }>({
       query: ({ id, body }) => ({
@@ -37,7 +37,7 @@ export const adsApi = createApi({
         body,
         method: 'PUT',
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Item', id }, 'Items'],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Item', id }, 'Items'],
       onQueryStarted: async (_, { queryFulfilled }) => {
         try {
           await queryFulfilled;
