@@ -3,8 +3,8 @@ import { IconXboxXFilled } from '@tabler/icons-react';
 import type { FieldsProps } from '../../types';
 import { useState } from 'react';
 
-export const TextField = ({ label, value, fw = 700, necessary }: FieldsProps) => {
-  const [currentValue, setCurrentValue] = useState(value);
+export const TextField = ({ label, value, fw = 700, necessary = false }: FieldsProps) => {
+  const [currentValue, setCurrentValue] = useState(value || '');
   return (
     <TextInput
       size="sm"
@@ -26,6 +26,9 @@ export const TextField = ({ label, value, fw = 700, necessary }: FieldsProps) =>
       }
       styles={{
         label: { marginBottom: 6, fontWeight: fw },
+        input: {
+          borderColor: !necessary && currentValue === '' ? 'orange' : undefined,
+        },
       }}
     />
   );
