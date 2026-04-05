@@ -14,6 +14,7 @@ import type {
   RawFormValues,
 } from '../../../../types';
 import { useEditForm } from '../../hooks/use-edit-form';
+import { MAX_LENGTH } from '../../constants';
 
 export const ItemForm = () => {
   const { id } = useParams();
@@ -91,6 +92,8 @@ export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
         <Textarea
           label="Описание"
           placeholder="Описание"
+          maxLength={MAX_LENGTH}
+          description={`${form.values.description.length}/${MAX_LENGTH}`}
           {...form.getInputProps('description')}
           w={942}
           styles={{
