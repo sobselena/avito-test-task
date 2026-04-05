@@ -37,7 +37,7 @@ export const CharacteristicsFields = ({
           <TextField
             key={key}
             label={name}
-            defaultValue={(params as Record<string, string>)?.[key]}
+            value={(params as Record<string, string>)?.[key]}
             fw={400}
           />
         );

@@ -37,10 +37,10 @@ const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
 
         <Divider />
 
-        <TextField label="Цена" defaultValue={data?.price.toString()} necessary={true} />
+        <TextField label="Цена" value={data?.price.toString()} necessary={true} />
         <Divider />
 
-        <TextField label="Название" defaultValue={data?.title} necessary={true} />
+        <TextField label="Название" value={data?.title} necessary={true} />
         <Divider />
 
         <CharacteristicsFields category={category} params={data?.params} />

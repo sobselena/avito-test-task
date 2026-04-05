@@ -21,6 +21,7 @@ export const SelectField = ({
         label
       )
     }
+    key={defaultValue}
     placeholder={label}
     data={data}
     defaultValue={defaultValue ?? null}
