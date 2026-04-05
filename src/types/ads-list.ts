@@ -66,9 +66,20 @@ export type ItemUpdateIn = {
   params: ParamsType;
 };
 
+export type ActualItemUpdateIn = Omit<ItemUpdateIn, 'params'> & {
+  params: AutoItemParams | RealEstateItemParams | ElectronicsItemParams;
+};
 export type ItemUpdateOut = ItemUpdateIn & {
   id: number;
   createdAt: Date;
   updatedAt?: Date;
   needsRevision: boolean;
+};
+
+export type RawFormValues = {
+  title: string;
+  price: string;
+  description: string;
+  category: string;
+  params: ParamsType;
 };

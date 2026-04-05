@@ -1,14 +1,19 @@
-import { useParams } from 'react-router';
-import { useGetAdInfoQuery } from '../../../../redux/api';
+import { useNavigate, useParams } from 'react-router';
+import { useEditAdInfoMutation, useGetAdInfoQuery } from '../../../../redux/api';
 import { CATEGORY_OPTIONS } from '../../../../constants';
 import { Button, Divider, Group, Loader, Stack, Textarea } from '@mantine/core';
 import { TextField } from '../text-field';
 import { CharacteristicsFields } from '../characteristics-fields';
 import { SelectField } from '../select-field';
-import { getCategory, getCategoryByName, getCategoryDefaultValue } from '../../utils';
+import { getCategory, getCategoryByName } from '../../utils';
 import { useState } from 'react';
-import { useForm } from '@mantine/form';
-import type { ItemUpdateOut, ParamsType } from '../../../../types';
+import type {
+  ActualItemUpdateIn,
+  CategoryType,
+  ItemUpdateOut,
+  RawFormValues,
+} from '../../../../types';
+import { useEditForm } from '../../hooks/use-edit-form';
 
 export const ItemForm = () => {
   const { id } = useParams();
@@ -21,38 +26,39 @@ export const ItemForm = () => {
 
 export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
   const [category, setCategory] = useState(getCategory(data?.category));
-
-  const form = useForm({
-    initialValues: {
-      title: data?.title || '',
-      price: data?.price?.toString() || '',
-      description: data?.description || '',
-      category: getCategoryDefaultValue(category),
-      params: data?.params ? { ...data.params } : ({} as ParamsType),
-    },
-
-    validate: {
-      title: (value) => (value.trim() === '' ? 'Название должно быть заполнено' : null),
-
-      price: (value) => (value.trim() === '' ? 'Цена должна быть заполнена' : null),
-    },
-
-    validateInputOnChange: true,
-  });
+  const [editAdInfo] = useEditAdInfoMutation();
+  const [form] = useEditForm({ data, category });
+  const navigate = useNavigate();
+  const handleSubmit = async (values: RawFormValues) => {
+    const transformed: ActualItemUpdateIn = {
+      ...values,
+      category: values.category as CategoryType,
+      price: Number(values.price),
+    };
+    console.log(transformed);
+    try {
+      await editAdInfo({ id: data.id, body: transformed });
+      await navigate(-1);
+    } catch {
+      console.warn('Something went wrong');
+    }
+  };
 
   return (
-    <form onSubmit={form.onSubmit((values) => console.log(values))}>
+    <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
       <Stack gap="md">
         <SelectField
           label="Категория"
-          data={CATEGORY_OPTIONS.map((option) => option.label)}
+          data={CATEGORY_OPTIONS.map((option) => option)}
           {...form.getInputProps('category')}
           onChange={(value: string | null) => {
             if (value === null) return;
 
             form.setFieldValue('category', value);
             const mapped = getCategoryByName(value);
-            if (mapped) setCategory(mapped);
+            if (mapped) {
+              setCategory(mapped);
+            }
           }}
           allowDeselect={false}
         />
