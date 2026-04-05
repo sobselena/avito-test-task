@@ -2,9 +2,9 @@ import { Alert, Paper } from '@mantine/core';
 import { IconAlertCircleFilled } from '@tabler/icons-react';
 import { getUnfilledCharacteristics } from '../../utils';
 import type { RevisionType } from '../../types';
-import { categoryTranslations } from '../../constants';
+import { categoryTranslations } from '../../../../constants';
 
-export const NeedsRevision = ({ category, params, description }: RevisionType) => (
+export const NeedsRevision = ({ category, params, hasDescription }: RevisionType) => (
   <Paper shadow="lg" radius="md" mb={16}>
     <Alert
       variant="light"
@@ -15,12 +15,12 @@ export const NeedsRevision = ({ category, params, description }: RevisionType) =
     >
       У объявления не заполнены поля:
       <ul style={{ marginTop: 4, paddingLeft: 20, marginBlockEnd: 0 }}>
-        {!description && <li>Описание</li>}
+        {!hasDescription && <li>Описание</li>}
         {getUnfilledCharacteristics({
           category: category,
           params: params,
         }).map((charKey) => (
-          <li key={charKey}>{categoryTranslations[category][charKey]}</li>
+          <li key={charKey}>{categoryTranslations[category][charKey].label}</li>
         ))}
       </ul>
     </Alert>

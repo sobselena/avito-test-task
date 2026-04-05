@@ -1,28 +1,27 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { AdsFilters, ItemsGetOut, ItemUpdateOut } from '../../types';
+import type { ActualItemUpdateIn, AdsFilters, ItemsGetOut, ItemUpdateOut } from '../../types';
+import { showNotifications } from '../../utils';
+import { BASIC_PATH } from '../../constants';
 
 export const adsApi = createApi({
   reducerPath: 'adsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://127.0.0.1:8080/items',
+    baseUrl: BASIC_PATH,
   }),
+  tagTypes: ['Item', 'Items'],
   endpoints: (build) => ({
     getAds: build.query<ItemsGetOut, AdsFilters>({
       query: (filters) => {
         {
-          console.log(
-            `?${Object.entries(filters)
-              .filter(([, value]) => value)
-              .map(([keys, value]) => `${keys}=${value}`)
-              .join('&')}`
-          );
           return {
-            url: `?${Object.entries(filters)
-              .filter(([, value]) => value)
-              .map(([keys, value]) => `${keys}=${value}`)
-              .join('&')}`,
+            url: '',
+            params: filters,
           };
         }
+      },
+      providesTags: (result) => {
+        if (!result) return ['Items'];
+        return ['Items', ...result.items.map((item) => ({ type: 'Item' as const, id: item.id }))];
       },
     }),
 
@@ -30,8 +29,25 @@ export const adsApi = createApi({
       query: (id) => ({
         url: `${id}`,
       }),
+      providesTags: (result, error, id) => [{ type: 'Item', id }],
+    }),
+    editAdInfo: build.mutation<undefined, { id: number; body: ActualItemUpdateIn }>({
+      query: ({ id, body }) => ({
+        url: `${id}`,
+        body,
+        method: 'PUT',
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'Item', id }, 'Items'],
+      onQueryStarted: async (_, { queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+          showNotifications('success');
+        } catch {
+          showNotifications('error');
+        }
+      },
     }),
   }),
 });
 
-export const { useGetAdsQuery, useGetAdInfoQuery } = adsApi;
+export const { useGetAdsQuery, useGetAdInfoQuery, useEditAdInfoMutation } = adsApi;

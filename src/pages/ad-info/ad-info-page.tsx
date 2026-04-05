@@ -15,7 +15,7 @@ import placeholderImg from '../../app/assets/images/placeholder.png';
 import { useGetAdInfoQuery } from '../../redux/api';
 import { getDateFormat } from '../../utils';
 import { Characteristics } from './components/characteristics';
-import { NeedsRevision } from './components/alert';
+import { NeedsRevision } from './components/needs-revision';
 
 export const AdInfoPage = () => {
   const params = useParams();
@@ -76,7 +76,9 @@ export const AdInfoPage = () => {
                     <Title order={3} fw={500} size="lg">
                       Описание
                     </Title>
-                    <Text c={'red'}>{data.description || 'Отсутствует'}</Text>
+                    <Text c={data.description ? undefined : 'red'}>
+                      {data.description || 'Отсутствует'}
+                    </Text>
                   </Stack>
                 </Stack>
               </Stack>
@@ -84,7 +86,11 @@ export const AdInfoPage = () => {
               <Stack w={512}>
                 <Stack gap="xs">
                   {data.needsRevision && (
-                    <NeedsRevision params={data.params} category={data.category} />
+                    <NeedsRevision
+                      params={data.params}
+                      category={data.category}
+                      hasDescription={!!data.description}
+                    />
                   )}
                   <Characteristics params={data.params} category={data.category} />
                 </Stack>

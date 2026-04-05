@@ -1,5 +1,5 @@
+import { categoryTranslations } from '../../../constants';
 import type { CategoryType, ParamsType } from '../../../types';
-import { categoryTranslations } from '../constants';
 
 export const getUnfilledCharacteristics = ({
   category,

@@ -1,7 +1,6 @@
 import { Stack, Table, Text, Title } from '@mantine/core';
-
-import { categoryTranslations } from '../../constants';
 import type { RevisionType } from '../../types';
+import { categoryTranslations } from '../../../../constants';
 
 export const Characteristics = ({ category, params }: RevisionType) => {
   if (!params) return null;
@@ -9,7 +8,7 @@ export const Characteristics = ({ category, params }: RevisionType) => {
   const rows = Object.entries(params).map(([key, value]) => (
     <Table.Tr key={key}>
       <Table.Td c="dimmed" w={150} p={2} fw={500}>
-        {categoryTranslations[category][key]}
+        {categoryTranslations[category][key].label}
       </Table.Td>
       <Table.Td p={2}>{value || '—'}</Table.Td>
     </Table.Tr>

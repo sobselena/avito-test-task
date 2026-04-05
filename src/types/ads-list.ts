@@ -24,7 +24,7 @@ export type AdsFilters = Partial<{
   skip: number;
   q: string;
   needsRevision: boolean;
-  categories: string;
+  categories: CategoryType[];
   sortColumn: SortColumnType;
   sortDirection: SortDirectionType;
 }>;
@@ -53,19 +53,33 @@ export type ElectronicsItemParams = {
   color?: string;
 };
 
-export type ParamsType = AutoItemParams | RealEstateItemParams | ElectronicsItemParams;
+export type ParamsType =
+  | ({ category: 'auto' } & AutoItemParams)
+  | ({ category: 'real_estate' } & RealEstateItemParams)
+  | ({ category: 'electronics' } & ElectronicsItemParams);
 
 export type ItemUpdateIn = {
-  category: 'auto' | 'real_estate' | 'electronics';
   title: string;
-  description?: string;
   price: number;
+  description?: string;
+  category: CategoryType;
   params: ParamsType;
 };
 
+export type ActualItemUpdateIn = Omit<ItemUpdateIn, 'params'> & {
+  params: AutoItemParams | RealEstateItemParams | ElectronicsItemParams;
+};
 export type ItemUpdateOut = ItemUpdateIn & {
   id: number;
   createdAt: Date;
   updatedAt?: Date;
   needsRevision: boolean;
+};
+
+export type RawFormValues = {
+  title: string;
+  price: string;
+  description: string;
+  category: string;
+  params: ParamsType;
 };
