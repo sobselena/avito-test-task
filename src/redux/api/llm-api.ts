@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { RawFormValues } from '../../types';
 import { descriptionPrompt, pricePrompt } from '../utils';
+import { LLM_API_KEY } from '../constants';
+import type { LLMOut } from '../../types/llm-out';
 
 export const llmApi = createApi({
   reducerPath: 'llm',
@@ -8,16 +10,16 @@ export const llmApi = createApi({
     baseUrl: 'https://openrouter.ai/api/v1/chat/completions',
   }),
   endpoints: (build) => ({
-    getDescription: build.mutation({
-      query: (rawFormValues: RawFormValues) => ({
+    getDescription: build.mutation<LLMOut, RawFormValues>({
+      query: (rawFormValues) => ({
         method: 'POST',
         url: '',
         headers: {
-          Authorization: 'Bearer <OPENROUTER_API_KEY>',
+          Authorization: `Bearer ${LLM_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: {
-          model: 'google/gemma-3-4b-it:free',
+          model: 'qwen/qwen3.6-plus:free',
           messages: [
             {
               role: 'user',
@@ -33,12 +35,12 @@ export const llmApi = createApi({
       }),
     }),
 
-    getMarketPrice: build.mutation({
-      query: (rawFormValues: RawFormValues) => ({
+    getMarketPrice: build.mutation<string, RawFormValues>({
+      query: (rawFormValues) => ({
         method: 'POST',
         url: '',
         headers: {
-          Authorization: 'Bearer <OPENROUTER_API_KEY>',
+          Authorization: `Bearer ${LLM_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: {
