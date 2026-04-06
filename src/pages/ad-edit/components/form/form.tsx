@@ -1,20 +1,22 @@
-import { useNavigate, useParams } from 'react-router';
-import { useEditAdInfoMutation, useGetAdInfoQuery } from '../../../../redux/api';
-import { CATEGORY_OPTIONS } from '../../../../constants';
 import { Button, Divider, Group, Loader, Stack, Textarea } from '@mantine/core';
-import { TextField } from '../text-field';
-import { CharacteristicsFields } from '../characteristics-fields';
-import { SelectField } from '../select-field';
-import { getCategory, getCategoryByName } from '../../utils';
 import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { CATEGORY_OPTIONS } from '../../../../constants';
+import { useEditAdInfoMutation, useGetAdInfoQuery } from '../../../../redux/api';
 import type {
   ActualItemUpdateIn,
   CategoryType,
   ItemUpdateOut,
   RawFormValues,
 } from '../../../../types';
-import { useEditForm } from '../../hooks/use-edit-form';
 import { MAX_LENGTH } from '../../constants';
+import { useEditForm } from '../../hooks/use-edit-form';
+import { getCategory, getCategoryByName } from '../../utils';
+import { CharacteristicsFields } from '../characteristics-fields';
+import { SelectField } from '../select-field';
+import { TextField } from '../text-field';
+import { DescriptionButton } from '../buttons';
+import { PriceButton } from '../buttons/price-button';
 
 export const ItemForm = () => {
   const { id } = useParams();
@@ -36,7 +38,7 @@ export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
       category: values.category as CategoryType,
       price: Number(values.price),
     };
-    console.log(transformed);
+
     try {
       await editAdInfo({ id: data.id, body: transformed });
       await navigate(-1);
@@ -63,45 +65,53 @@ export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
           }}
           allowDeselect={false}
         />
-
         <Divider />
 
-        <TextField
-          label="Цена"
-          necessary
-          {...form.getInputProps('price')}
-          type="number"
-          onClear={() => form.setFieldValue('price', '')}
-        />
-
+        <Group gap={'xl'} align="flex-end">
+          <TextField
+            label="Цена"
+            necessary
+            {...form.getInputProps('price')}
+            type="number"
+            onClear={() => form.setFieldValue('price', '')}
+          />
+          <PriceButton values={form.values} />
+        </Group>
         <Divider />
-
         <TextField
           label="Название"
           necessary
           {...form.getInputProps('title')}
           onClear={() => form.setFieldValue('title', '')}
         />
-
         <Divider />
-
         <CharacteristicsFields category={category} form={form} />
-
         <Divider />
+        <Stack gap={'xs'} align="flex-start">
+          <Textarea
+            label="Описание"
+            resize="vertical"
+            placeholder="Описание"
+            maxLength={MAX_LENGTH}
+            description={`${form.values.description.length}/${MAX_LENGTH}`}
+            {...form.getInputProps('description')}
+            w={942}
+            styles={{
+              input: {
+                borderColor: form.values.description ? undefined : 'var(--mantine-color-orange-5)',
+              },
+            }}
+          />
 
-        <Textarea
-          label="Описание"
-          placeholder="Описание"
-          maxLength={MAX_LENGTH}
-          description={`${form.values.description.length}/${MAX_LENGTH}`}
-          {...form.getInputProps('description')}
-          w={942}
-          styles={{
-            input: {
-              borderColor: form.values.description ? undefined : 'var(--mantine-color-orange-5)',
-            },
-          }}
-        />
+          <DescriptionButton
+            values={form.values}
+            onSave={(value?: string) => {
+              if (value) {
+                form.setFieldValue('description', value);
+              }
+            }}
+          />
+        </Stack>
         <Group gap={10}>
           <Button type="submit" fw={500} disabled={Object.keys(form.errors).length > 0}>
             Сохранить
