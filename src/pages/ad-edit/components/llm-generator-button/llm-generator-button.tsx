@@ -6,12 +6,18 @@ import type { RawFormValues } from '../../../../types';
 
 export const LLMGeneratorButton = ({ values }: { values: RawFormValues }) => {
   const [open, setOpen] = useState(false);
-  const [getDescription, { data: descriptionData, isLoading }] = useGetDescriptionMutation();
-  console.log(descriptionData);
-  async function handleGetDescription() {
+  const [getDescription, { data: descriptionData, isLoading, isError }] =
+    useGetDescriptionMutation();
+
+  const handleGetDescription = async () => {
+    setOpen(false);
     await getDescription(values);
     setOpen(true);
-  }
+  };
+
+  const content = descriptionData?.choices?.[0].message.content;
+  const hasError = isError || !content;
+
   return (
     <Popover
       opened={open}
@@ -20,43 +26,40 @@ export const LLMGeneratorButton = ({ values }: { values: RawFormValues }) => {
       position="top"
       withArrow
       shadow="xl"
-      offset={10}
     >
       <Popover.Target>
         <Button
           variant="light"
-          w={'auto'}
           color="yellow"
-          fw={500}
-          mb={'md'}
           leftSection={isLoading ? <Loader size={18} color="yellow" /> : <IconBulb size={18} />}
           onClick={handleGetDescription}
           disabled={isLoading}
         >
-          {isLoading
-            ? 'Выполняется запрос'
-            : values.description
-              ? 'Улучшить описание'
-              : 'Придумать описание'}
+          {isLoading ? 'Выполняется запрос' : hasError ? 'Повторить запрос' : 'Придумать описание'}
         </Button>
       </Popover.Target>
 
-      <Popover.Dropdown p="md" style={{ borderRadius: 0 }}>
+      <Popover.Dropdown p="md" bg={hasError ? 'red.0' : undefined} style={{ borderRadius: 'none' }}>
         <Stack gap="xs">
-          <Text fw={700} size="sm">
-            Ответ AI:
-          </Text>
+          {hasError ? (
+            <Text fw={700} c="red">
+              Произошла ошибка при запросе к AI
+            </Text>
+          ) : (
+            <Text fw={700} size="sm">
+              Ответ AI:
+            </Text>
+          )}
 
-          <Text size="sm" c="gray.8">
-            {descriptionData?.choices[0].message.content}
+          <Text size="sm" c={hasError ? 'black' : 'gray.8'}>
+            {content || 'Попробуйте повторить запрос или закройте уведомление'}
           </Text>
 
           <Group gap="sm" mt="sm">
             <Button
               size="compact-sm"
-              radius={'sm'}
-              variant="outline"
-              color="gray"
+              color={hasError ? 'red' : 'gray'}
+              variant={hasError ? 'light' : 'outline'}
               onClick={() => setOpen(false)}
             >
               Закрыть

@@ -5,5 +5,5 @@ export type Choice = {
 };
 
 export type LLMOut = {
-  choices: Choice[];
+  choices?: Choice[];
 };
