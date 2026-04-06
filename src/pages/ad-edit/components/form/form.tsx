@@ -1,5 +1,5 @@
 import { Button, Divider, Group, Loader, Stack, Textarea } from '@mantine/core';
-import { useState } from 'react';
+
 import { useNavigate, useParams } from 'react-router';
 import { CATEGORY_OPTIONS } from '../../../../constants';
 import { useEditAdInfoMutation, useGetAdInfoQuery } from '../../../../redux/api';
@@ -11,7 +11,6 @@ import type {
 } from '../../../../types';
 import { MAX_LENGTH } from '../../constants';
 import { useEditForm } from '../../hooks/use-edit-form';
-import { getCategory, getCategoryByName } from '../../utils';
 import { CharacteristicsFields } from '../characteristics-fields';
 import { SelectField } from '../select-field';
 import { TextField } from '../text-field';
@@ -28,9 +27,8 @@ export const ItemForm = () => {
 };
 
 export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
-  const [category, setCategory] = useState(getCategory(data?.category));
   const [editAdInfo] = useEditAdInfoMutation();
-  const [form] = useEditForm({ data, category });
+  const [form] = useEditForm({ data, category: data.category });
   const navigate = useNavigate();
   const handleSubmit = async (values: RawFormValues) => {
     const transformed: ActualItemUpdateIn = {
@@ -58,10 +56,6 @@ export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
             if (value === null) return;
 
             form.setFieldValue('category', value);
-            const mapped = getCategoryByName(value);
-            if (mapped) {
-              setCategory(mapped);
-            }
           }}
           allowDeselect={false}
         />
@@ -85,7 +79,7 @@ export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
           onClear={() => form.setFieldValue('title', '')}
         />
         <Divider />
-        <CharacteristicsFields category={category} form={form} />
+        <CharacteristicsFields category={form.values.category as CategoryType} form={form} />
         <Divider />
         <Stack gap={'xs'} align="flex-start">
           <Textarea
@@ -123,7 +117,7 @@ export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
             style={{ backgroundColor: '#D9D9D9', color: '#5A5A5A' }}
             type="button"
             onClick={() => {
-              setCategory(data.category);
+              form.setFieldValue('category', data.category);
               form.reset();
             }}
           >
