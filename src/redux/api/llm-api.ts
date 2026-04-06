@@ -35,7 +35,7 @@ export const llmApi = createApi({
       }),
     }),
 
-    getMarketPrice: build.mutation<string, RawFormValues>({
+    getMarketPrice: build.mutation<LLMOut, RawFormValues>({
       query: (rawFormValues) => ({
         method: 'POST',
         url: '',

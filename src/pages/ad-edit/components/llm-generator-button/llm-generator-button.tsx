@@ -1,23 +1,42 @@
 import { Button, Group, Loader, Popover, Stack, Text } from '@mantine/core';
-import { IconBulb } from '@tabler/icons-react';
+import { IconBulb, IconRotateClockwise } from '@tabler/icons-react';
 import { useState } from 'react';
-import { useGetDescriptionMutation } from '../../../../redux/api/llm-api';
 import type { RawFormValues } from '../../../../types';
+import type { LLMOut } from '../../../../types/llm-out';
 
-export const LLMGeneratorButton = ({ values }: { values: RawFormValues }) => {
+export const LLMGeneratorButton = ({
+  values,
+  descriptionData,
+  isLoading,
+  isError,
+  getData,
+  onSave,
+  label,
+}: {
+  values: RawFormValues;
+  descriptionData?: LLMOut;
+  isLoading: boolean;
+  isError: boolean;
+  onSave?: (value?: string) => void;
+  label: string;
+  getData: (values: RawFormValues) => Promise<LLMOut>;
+}) => {
   const [open, setOpen] = useState(false);
-  const [getDescription, { data: descriptionData, isLoading, isError }] =
-    useGetDescriptionMutation();
-
+  const [isRepeated, setIsRepeated] = useState(false);
   const handleGetDescription = async () => {
-    setOpen(false);
-    await getDescription(values);
-    setOpen(true);
+    try {
+      setOpen(false);
+      await getData(values);
+    } catch {
+      console.warn('Something went wrong');
+    } finally {
+      setOpen(true);
+      setIsRepeated(true);
+    }
   };
 
   const content = descriptionData?.choices?.[0].message.content;
-  const hasError = isError || !content;
-
+  const hasError = isError || (!content && isRepeated);
   return (
     <Popover
       opened={open}
@@ -31,11 +50,19 @@ export const LLMGeneratorButton = ({ values }: { values: RawFormValues }) => {
         <Button
           variant="light"
           color="yellow"
-          leftSection={isLoading ? <Loader size={18} color="yellow" /> : <IconBulb size={18} />}
+          leftSection={
+            isLoading ? (
+              <Loader size={18} color="yellow" />
+            ) : isRepeated ? (
+              <IconRotateClockwise size={18} />
+            ) : (
+              <IconBulb size={18} />
+            )
+          }
           onClick={handleGetDescription}
           disabled={isLoading}
         >
-          {isLoading ? 'Выполняется запрос' : hasError ? 'Повторить запрос' : 'Придумать описание'}
+          {isLoading ? 'Выполняется запрос' : isRepeated ? 'Повторить запрос' : label}
         </Button>
       </Popover.Target>
 
@@ -56,6 +83,18 @@ export const LLMGeneratorButton = ({ values }: { values: RawFormValues }) => {
           </Text>
 
           <Group gap="sm" mt="sm">
+            {onSave && !hasError && (
+              <Button
+                size="compact-sm"
+                variant={'filled'}
+                onClick={() => {
+                  setOpen(false);
+                  onSave(content);
+                }}
+              >
+                Применить
+              </Button>
+            )}
             <Button
               size="compact-sm"
               color={hasError ? 'red' : 'gray'}

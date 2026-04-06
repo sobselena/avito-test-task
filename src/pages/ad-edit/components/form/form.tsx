@@ -15,7 +15,8 @@ import { getCategory, getCategoryByName } from '../../utils';
 import { CharacteristicsFields } from '../characteristics-fields';
 import { SelectField } from '../select-field';
 import { TextField } from '../text-field';
-import { LLMGeneratorButton } from '../llm-generator-button';
+import { DescriptionButton } from '../buttons';
+import { PriceButton } from '../buttons/price-button';
 
 export const ItemForm = () => {
   const { id } = useParams();
@@ -65,13 +66,17 @@ export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
           allowDeselect={false}
         />
         <Divider />
-        <TextField
-          label="Цена"
-          necessary
-          {...form.getInputProps('price')}
-          type="number"
-          onClear={() => form.setFieldValue('price', '')}
-        />
+
+        <Group gap={'xl'} align="flex-end">
+          <TextField
+            label="Цена"
+            necessary
+            {...form.getInputProps('price')}
+            type="number"
+            onClear={() => form.setFieldValue('price', '')}
+          />
+          <PriceButton values={form.values} />
+        </Group>
         <Divider />
         <TextField
           label="Название"
@@ -85,6 +90,7 @@ export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
         <Stack gap={'xs'} align="flex-start">
           <Textarea
             label="Описание"
+            resize="vertical"
             placeholder="Описание"
             maxLength={MAX_LENGTH}
             description={`${form.values.description.length}/${MAX_LENGTH}`}
@@ -97,7 +103,14 @@ export const ActualForm = ({ data }: { data: ItemUpdateOut }) => {
             }}
           />
 
-          <LLMGeneratorButton values={form.values} />
+          <DescriptionButton
+            values={form.values}
+            onSave={(value?: string) => {
+              if (value) {
+                form.setFieldValue('description', value);
+              }
+            }}
+          />
         </Stack>
         <Group gap={10}>
           <Button type="submit" fw={500} disabled={Object.keys(form.errors).length > 0}>
